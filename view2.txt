@@ -1,0 +1,75 @@
+before delete 
+
+on db_penjualan . pembelian
+
+delete from beli_barang where id_pembelian=old.id_pembelian;
+
+//view 
+
+select *, sum(jumlah) as total from barang_beli_list gruop by id_pembelian
+
+select 
+	pembelian.id_pembelian,
+	waktu, nama, sum(banyak_beli*harga_beli) as`total`
+from 
+	supplier, pembelian, beli_barang 
+where 
+	supplier.id_supplier=pembelian.id_pembelian and 
+	pembelian.id_pembelian=beli_barang.id_pembelian 
+group by 
+	pembelian.id_pembelian
+
+select *, date(waktu) as tgl from pembelian_list
+
+//triger anyar
+
+barang_jual_tambah*
+
+after insert on jual_barang
+
+update barang set stok=stok-new.banyak_jual where id_brg=new.id_barang;
+
+barang_jual_hapus*
+
+before delete on jual_barang
+
+update barang set stok=stok+old.banyak_jual where id_barang=old.id_barang;
+
+penjualan_hapus*
+
+before delete on penjual
+
+delete from jual_barang where id_penjualan=old.id_penjualan;
+
+//view anyar
+
+*struk_jual
+
+select 
+	id_jual_barang, 
+	jual_barang.id_barang, 
+	banyak_jual, 	
+	harga_jual, 
+	barang_jual.harga_jual, 
+	banyak_jual*barang_j.harga_jual as jumlah, barcode, nama_barang 
+from 
+	barang, jual_barang 
+where 
+	barang.id_barang=jual_barang;
+
+penjualan_list*
+
+select 
+	penjualan.id_penjualan, 
+	waktu, 
+	penjualan.id_pengguna, 
+	nama, 
+	sum(banyak_jual*harga_jual) as total  
+from penjualan, jual_barang, pengguna 
+where 
+	penjualan.id_penjualan=jual_barang.id_penjualan, and  
+	pengguna.id_pengguna=penjualan.id_pengguna 
+group by 
+	penjualan.id_penjualan;
+
+

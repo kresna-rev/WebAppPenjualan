@@ -1,0 +1,14 @@
+SELECT
+	id_beli_barang, 
+	beli_barang.id_barang, 
+	id_pembelian, 
+	banyak_beli, 
+	harga_beli, 
+	banyak_beli*harga_beli AS jumlah, 	
+	barcode, 	
+	nama
+FROM
+	beli_barang, 
+	barang 
+WHERE
+	beli_barang.id_barang=barang.id_barang;
